@@ -1,0 +1,26 @@
+# Compositor
+# picom &
+
+# Wallpaper
+nitrogen --restore &
+
+# Notifications 
+dunst &
+
+# Keyboard layout toggle
+
+setxkbmap -layout us,ru -option grp:alt_shift_toggle &
+
+# Status monitor
+while true
+do
+	case "$(xset -q|grep LED| awk '{ print $10 }')" in
+		"00000000") KEYBOARDLAYOUT="en" ;;
+  		"00001000") KEYBOARDLAYOUT="ru" ;;
+  		*) KEYBOARDLAYOUT="unknown" ;;
+	esac
+	VOL=$(amixer get Master | tail -1 | sed 's/.*\[\([0-9]*%\)\].*/\1/')
+	LOCALTIME=$(date +%d.%m.%Y" | "%H:%M)
+	xsetroot -name " $KEYBOARDLAYOUT |  $VOL | $LOCALTIME "
+	sleep 0.2s
+done &
